@@ -2369,7 +2369,7 @@ figure {
         max-width: 397px;
     }
 	.search-form {
-    margin-bottom: 93px;
+    margin-bottom: 93px !important;
     }
     input[type="submit"]{
         height: 38px;
