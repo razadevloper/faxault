@@ -2368,6 +2368,9 @@ figure {
     .search {
         max-width: 397px;
     }
+	.search-form {
+    margin-bottom: 93px;
+    }
     input[type="submit"]{
         height: 38px;
     }
@@ -2471,6 +2474,9 @@ figure {
     .scroll-btn {
         bottom: 268px;
     }
+	.mobile-nav-wrapper{
+		display: none;
+	}
     .ourproduct-sec.cmn-gap {
         padding: 15px 0;
     }
