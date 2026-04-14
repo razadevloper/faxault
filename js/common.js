@@ -1,221 +1,230 @@
-jQuery(document).ready(function ($) {
-    // document start
+jQuery(function ($) {
 
+    /* =============================
+       NAVBAR DROPDOWN
+    ============================= */
+    function initNavbar() {
+        $("<span class='clickD'></span>").insertAfter(".navbar-nav li.menu-item-has-children > a");
 
-    // Navbar
-    $("<span class='clickD'></span>").insertAfter(".navbar-nav li.menu-item-has-children > a");
-    $('.navbar-nav li .clickD').click(function (e) {
-        e.preventDefault();
-        var $this = $(this);
-        if ($this.next().hasClass('show')) {
-            $this.next().removeClass('show');
-            $this.removeClass('toggled');
-        }
-        else {
-            $this.parent().parent().find('.sub-menu').removeClass('show');
-            $this.parent().parent().find('.toggled').removeClass('toggled');
-            $this.next().toggleClass('show');
-            $this.toggleClass('toggled');
-        }
-    });
+        $('.navbar-nav').on('click', '.clickD', function (e) {
+            e.preventDefault();
 
-    $(window).on('resize', function () {
-        if ($(this).width() < 1025) {
-            $('html').click(function () {
-                $('.navbar-nav li .clickD').removeClass('toggled');
-                $('.toggled').removeClass('toggled');
-                $('.sub-menu').removeClass('show');
-            });
-            $(document).click(function () {
-                $('.navbar-nav li .clickD').removeClass('toggled');
-                $('.toggled').removeClass('toggled');
-                $('.sub-menu').removeClass('show');
-            });
-            $('.navbar-nav').click(function (e) {
-                e.stopPropagation();
-            });
-        }
-    });
-    // Navbar end
+            let $this = $(this);
 
-
-
-    /* ===== For menu animation === */
-    $(".navbar-toggler").click(function () {
-        $(".navbar-toggler").toggleClass("open");
-        $(".navbar-toggler .stick").toggleClass("open");
-        $('body,html').toggleClass("open-nav");
-    });
-
-    // Navbar end
-
-
-    // Sticky Nav
-    /*
-        $(window).scroll(function() {     
-            var scroll = $(window).scrollTop();     
-            if (scroll > 0) { 
-                $(".main-head").addClass("fixed"); 
-            } 
-            else {
-            $(".main-head").removeClass("fixed"); 
-            }
-        })
-    */
-
-    // back to top
-    if ($("#scroll").length) {
-        $(window).scroll(function () {
-            if ($(this).scrollTop() > 200) {
-                $('#scroll').fadeIn(200);
+            if ($this.next().hasClass('show')) {
+                $this.next().removeClass('show');
+                $this.removeClass('toggled');
             } else {
-                $('#scroll').fadeOut(200);
+                $('.sub-menu').removeClass('show');
+                $('.clickD').removeClass('toggled');
+
+                $this.next().addClass('show');
+                $this.addClass('toggled');
             }
         });
-        $('#scroll').click(function () {
+
+        // close menu on outside click (mobile)
+        $(document).on('click', function () {
+            if ($(window).width() < 1025) {
+                $('.sub-menu').removeClass('show');
+                $('.clickD').removeClass('toggled');
+            }
+        });
+
+        $('.navbar-nav').on('click', function (e) {
+            e.stopPropagation();
+        });
+    }
+
+
+    /* =============================
+       NAV TOGGLER
+    ============================= */
+    function initNavToggle() {
+        $(".navbar-toggler").on('click', function () {
+            $(this).toggleClass("open");
+            $(".navbar-toggler .stick").toggleClass("open");
+            $('body,html').toggleClass("open-nav");
+        });
+    }
+
+
+    /* =============================
+       BACK TO TOP
+    ============================= */
+    function initScrollTop() {
+        if (!$("#scroll").length) return;
+
+        $(window).on('scroll', function () {
+            $('#scroll').toggle($(this).scrollTop() > 200);
+        });
+
+        $('#scroll').on('click', function () {
             $("html, body").animate({ scrollTop: 0 }, 500);
             return false;
         });
     }
 
 
+    /* =============================
+       SLICK SLIDER
+    ============================= */
+    function initSlider() {
+        if (!$('.responsive').length) return;
+
+        $('.responsive').slick({
+            dots: true,
+            infinite: false,
+            speed: 300,
+            slidesToShow: 4,
+            slidesToScroll: 4,
+            responsive: [
+                { breakpoint: 1024, settings: { slidesToShow: 3, slidesToScroll: 3, infinite: true, dots: true } },
+                { breakpoint: 600, settings: { slidesToShow: 2, slidesToScroll: 2 } },
+                { breakpoint: 480, settings: { slidesToShow: 1, slidesToScroll: 1 } }
+            ]
+        });
+    }
 
 
-    $('.responsive').slick({
-        dots: true,
-        infinite: false,
-        speed: 300,
-        slidesToShow: 4,
-        slidesToScroll: 4,
-        responsive: [
-            {
-                breakpoint: 1024,
-                settings: {
-                    slidesToShow: 3,
-                    slidesToScroll: 3,
-                    infinite: true,
-                    dots: true
-                }
-            },
-            {
-                breakpoint: 600,
-                settings: {
-                    slidesToShow: 2,
-                    slidesToScroll: 2
-                }
-            },
-            {
-                breakpoint: 480,
-                settings: {
-                    slidesToShow: 1,
-                    slidesToScroll: 1
-                }
+    /* =============================
+       ACCORDION
+    ============================= */
+    function initAccordion() {
+        $('.accordion-button').on('click', function () {
+            let parent = $(this).parent();
+
+            if (parent.hasClass("active")) {
+                parent.removeClass("active");
+            } else {
+                $(".accordion-item").removeClass("active");
+                parent.addClass("active");
             }
-            // You can unslick at a given breakpoint now by adding:
-            // settings: "unslick"
-            // instead of a settings object
-        ]
-    });
+        });
+    }
 
 
-
-
-    // one page scroll section
-    /*
-    jQuery(function($){
-        var topMenuHeight = $(".main-head").outerHeight();
-        $(".navbar-collapse").menuScroll(topMenuHeight);
-      });
-      
-      // COPY THE FOLLOWING FUNCTION INTO ANY SCRIPTS
-      jQuery.fn.extend({
-          menuScroll: function(offset) {
-          // Declare all global variables
-              var topMenu = this;
-          var topOffset = offset ? offset : 0;
-              var menuItems = $(topMenu).find('a[href*="#"]');
-              var lastId;
-        
-          // Save all menu items into scrollItems array
-              var scrollItems = $(menuItems).map(function() {
-                  var item = $($(this).attr("href"));
-                  if (item.length) {
-                      return item;
-                  }
-              });
-      
-          // When the menu item is clicked, get the #id from the href value, then scroll to the #id element
-              $(topMenu).on("click", 'a[href*="#"]', function(e){
-                  var href = $(this).attr("href");
-                  
-                  var offsetTop = href === "#" ? 0 : $(href).offset().top-topOffset;
-      
-                  $('html, body').stop().animate({ 
-                      scrollTop: offsetTop
-                  }, 300);
-                  e.preventDefault();
-      
-              });
-          
-          // When page is scrolled
-              $(window).scroll(function(){
-                  var nm = $("html").scrollTop();
-                  var nw = $("body").scrollTop();
-                  var fromTop = (nm > nw ? nm : nw)+topOffset + 10;
-      
-            
-            // When the page pass one #id section, return all passed sections to scrollItems and save them into new array current
-                  var current = $(scrollItems).map(function(){
-                      if ($(this).offset().top <= fromTop && $(this).offset().top + (this).height() > fromTop)
-                      return this;
-                  });
-            
-            // Get the most recent passed section from current array
-                  current = current[current.length-1];
-                  var id = current && current.length ? current[0].id : "";
-                  if (lastId !== id) {
-                      lastId = id;
-                      // Set/remove active class
-                      $(menuItems)
-                      .parent().removeClass("current-menu-item")
-                      .end().filter("[href='#"+id+"']").parent().addClass("current-menu-item");
-                  }      
-      
-              });
-          }
-      });
-        
-    
-    */
-
-
-
-    $('.accordion-button').on('click', function () {
-        if ($(this).parent().hasClass("active")) {
-            $(this).parent().removeClass("active");
-        } else {
-            $(".accordion-item").removeClass("active");
-            $(this).parent().removeClass("active");
-            $(this).parent().addClass("active").find(".accordion-item");
-        }
-    });
-    (function () {
+    /* =============================
+       MOBILE MENU
+    ============================= */
+    function initMobileMenu() {
         $(".Hamburger").on("click", function () {
             $(".mob-stick").toggleClass("animate");
             $(".mobile-sub-menu").slideToggle("slow");
         });
-    })();
+    }
 
-    if ($("[data-fancybox]").length) {
-        Fancybox.bind("[data-fancybox]", {
-            // Your options go here
+
+    /* =============================
+       FANCYBOX
+    ============================= */
+    function initFancybox() {
+        if ($("[data-fancybox]").length) {
+            Fancybox.bind("[data-fancybox]", {});
+        }
+    }
+
+
+    /* =============================
+       SCROLL ANIMATION (GLOBAL)
+    ============================= */
+    function initScrollAnimation() {
+
+        if (!window.globalObserver) {
+            window.globalObserver = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        $(entry.target).addClass('fade-in-visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+        }
+
+        const elements = $('.accordion-item, .product-box, .blog-box, .card-box, .abt-cntnt, .abt-cntntTwo, .approach-cntnt, .about-img, .approach-img, .contact-sec');
+
+        elements.each(function (i) {
+            const el = this;
+
+            $(el).addClass('fade-in');
+
+            setTimeout(function () {
+                window.globalObserver.observe(el);
+            }, i * 120);
         });
 
+        // Fix for Bootstrap Tabs (re-trigger animation)
+        $('button[data-bs-toggle="pill"]').on('shown.bs.tab', function () {
+            $('.tab-pane.active .blog-box').each(function (i) {
+                const el = this;
+
+                $(el).removeClass('fade-in-visible').addClass('fade-in');
+
+                setTimeout(function () {
+                    window.globalObserver.observe(el);
+                }, i * 120);
+            });
+        });
     }
 
 
 
+    function initLazyLoad() {
 
-})
+        const lazyImages = document.querySelectorAll('.lazy-img');
 
+        if (!lazyImages.length) return;
 
+        const imageObserver = new IntersectionObserver(function (entries, observer) {
+
+            entries.forEach(function (entry) {
+
+                if (entry.isIntersecting) {
+
+                    const img = entry.target;
+
+                    const src = img.getAttribute('data-src');
+
+                    if (src) {
+                        img.src = src;
+
+                        img.onload = function () {
+                            img.classList.add('loaded');
+                        };
+                    }
+
+                    observer.unobserve(img);
+                }
+
+            });
+
+        }, {
+            threshold: 0.1,
+            rootMargin: "0px 0px 100px 0px" // preload before visible
+        });
+
+        lazyImages.forEach(function (img) {
+            imageObserver.observe(img);
+        });
+
+    }
+
+    /* =============================
+       INIT ALL
+    ============================= */
+    function init() {
+        initNavbar();
+        initNavToggle();
+        initLazyLoad();
+        initScrollTop();
+        initSlider();
+        initAccordion();
+        initMobileMenu();
+        initFancybox();
+        initScrollAnimation();
+    }
+
+    init();
+
+    
+
+});

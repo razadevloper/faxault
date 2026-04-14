@@ -1686,10 +1686,7 @@ figure {
     margin-bottom: 0;
 }
 
-.form-input input {
-    /* border-bottom: 1px solid #3B3B3B; */
-    /* border-radius: 0; */
-}
+
 
 .form-input input::placeholder {
     color: #fff;
@@ -1795,8 +1792,86 @@ figure {
     bottom: 41px;
 }
 
+/* ===================== ANIMATION CSS ===================== */
+
+/* Add to your CSS */
+/* FAQ item animation */
+.faq-wrapper .accordion-item {
+  transition: all 0.3s ease;
+  border-left: 3px solid transparent;
+}
+
+.faq-wrapper .accordion-item:hover {
+  transform: translateX(5px);
+  border-left: 3px solid #007bff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
 
 
+/* Smooth accordion animation */
+.faq-wrapper .accordion-collapse {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.3s ease;
+}
+
+/* When open (Bootstrap adds .show) */
+.faq-wrapper .accordion-collapse.show {
+  max-height: 500px;
+  padding: 10px 0;
+}
+
+.faq-wrapper .accordion-body {
+  transition: opacity 0.3s ease;
+  opacity: 0;
+}
+
+.faq-wrapper .accordion-collapse.show .accordion-body {
+  opacity: 1;
+}
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.fade-in-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease;
+}
+
+.fade-in-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+.lazy-img {
+    opacity: 0;
+    transition: opacity 0.5s ease, transform 0.6s ease;
+}
+
+.lazy-img.loaded {
+    opacity: 1;
+}
+
+/* optional blur effect */
+.lazy-img.blur {
+    filter: blur(10px);
+}
+
+.lazy-img.loaded.blur {
+    filter: blur(0);
+}
 
 /* ========== responsive css =========== */
 
